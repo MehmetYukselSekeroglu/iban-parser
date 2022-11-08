@@ -20,7 +20,8 @@ python3 dosya.py -i "çözümlenecek_iban"
 UYARI: IBAN'I YAZARKEN BOSLUK KULLANMYAINIZ 
 """
 import argparse
-
+from colorama import *
+import os
 arguman = argparse.ArgumentParser()
 arguman.add_argument("-i","--iban",required=True,help="usage: -i \"TR330001000030570718255001\"")
 argumanlar = vars(arguman.parse_args())
@@ -33,7 +34,12 @@ def country_detect (raw_1):
     global account_control
     global bank_branch
     global status_sepa
-    country_number = raw_1[0] + raw_1[1]
+    try:
+        country_number = raw_1[0] + raw_1[1]
+        country_number = country_number.upper()
+    except Exception:
+        print(f"{Fore.RED}Eksik veri.!{Style.RESET_ALL}")
+        return exit(1)
     if country_number == "TR":
         country = "Turkey"
         max_leng = 26
@@ -630,23 +636,26 @@ def country_detect (raw_1):
     else :
         country = "Not detected...!"
         error_satut = True
-    
-    return country , max_leng , status_sepa , account_control , bank_branch , country_number
 
+    return country , max_leng , status_sepa , account_control , bank_branch , country_number
+    
 
 def iban_parametres(iban_1):
     global control_number_global 
     global bank_code_local
     global rezerve_code  
     if country_detect(iban_1)[0] == "Turkey":
-        control_number_global = iban_1[2] + iban_1[3]
-        bank_code_local = iban_1[4] + iban_1[5] + iban_1[6] + iban_1[7] + iban_1[8]
-        rezerve_code = iban_1[9]
-        account_number = iban_1[10:26]
-        sube_kodu = iban_1[10:14]
-        müşteri_nosu_raw = iban_1[13:22]
-        hesap_eki_kodu = iban_1[22:]
-        
+        try:
+            control_number_global = iban_1[2] + iban_1[3]
+            bank_code_local = iban_1[4] + iban_1[5] + iban_1[6] + iban_1[7] + iban_1[8]
+            rezerve_code = iban_1[9]
+            account_number = iban_1[10:26]
+            sube_kodu = iban_1[10:14]
+            müşteri_nosu_raw = iban_1[13:22]
+            hesap_eki_kodu = iban_1[22:]
+        except Exception:
+            print(f"{Fore.RED}Eksik veri.!{Style.RESET_ALL}")
+            return exit(1)
         if bank_code_local == "00001":
             bank_name = "TC Merkez Bankası"
         elif bank_code_local == "00004":
@@ -720,46 +729,72 @@ def iban_parametres(iban_1):
         else:
             else_proc = "0"
             return else_proc
-
-        
-    return control_number_global, bank_code_local, rezerve_code, account_number , bank_name ,sube_kodu , müşteri_nosu_raw, hesap_eki_kodu
         #16
-
+    else:
+        control_number_global = "DESTEKLENMİYOR"
+        bank_code_local =  "DESTEKLENMİYOR"
+        rezerve_code = "DESTEKLENMİYOR"
+        account_number =  "DESTEKLENMİYOR"
+        sube_kodu = "DESTEKLENMİYOR"
+        müşteri_nosu_raw = "DESTEKLENMİYOR"
+        hesap_eki_kodu = "DESTEKLENMİYOR"
+        bank_name = "DESTEKLENMİYOR"
+    return control_number_global, bank_code_local, rezerve_code, account_number , bank_name ,sube_kodu , müşteri_nosu_raw, hesap_eki_kodu
 
 ulke = country_detect(iban)
+
 others_data = iban_parametres(iban)
 
 raw_iban_leng = len(iban)
 standart_leng = ulke[1]
 
+mavi = Fore.BLUE
+temiz = Style.RESET_ALL
+yesil = Fore.GREEN
+
+if os.name == 'nt':
+    try:
+        os.system("clear")
+    except Exception:
+        try:
+            os.system("cls")
+        except Exception:
+            pass
+else:
+    try:
+        os.system("clear")
+    except Exception:
+        pass
+print(f"{mavi} >> IBAN-PARSER.{temiz}")
 if raw_iban_leng == standart_leng:
     if iban_parametres(iban) != 0:
-        print ("-------------------------")
-        print (f"| Ülke: {ulke[0]}")
-        print (f"| Max iban uzunluğu: {ulke[1]}")
-        print (f"| SEPA desteği: {ulke[2]}")
-        print (f"| Hesap kontrolu: {ulke[2]}")
-        print (f"| Şube kontrolu: {ulke[4]}")
-        print (f"| Ülke kodu: {ulke[5]}")
-        print (f"| Global kontrol kodu: {others_data[0]}")
-        print (f"| Banka kodu: {others_data[1]}")
-        print (f"| Rezerv numrası: {others_data[2]}")
-        print (f"| Hesap numarası: {others_data[3]}") 
-        print (f"| Banka adı: {others_data[4]}")
-        print (f"| Şube kodu: {others_data[5]} - bankanın il/ilçe/sokak bilgisini verir")
-        print (f"| müşteri numarası (saf): {others_data[6]}")
-        print (f"| Hesap ek nosu: {others_data[7]}")
-        print ("-------------------------")
+        print (f"{mavi}|-------------------------")
+        print (f"| Tam iban:{temiz}{yesil} {iban}{temiz}")
+        print (f"{mavi}| Ülke:{yesil} {ulke[0]}{temiz}")
+        print (f"{mavi}| Max iban uzunluğu:{yesil} {ulke[1]}")
+        print (f"{mavi}| SEPA desteği:{yesil} {ulke[2]}")
+        print (f"{mavi}| Hesap kontrolu:{yesil} {ulke[2]}")
+        print (f"{mavi}| Şube kontrolu:{yesil} {ulke[4]}")
+        print (f"{mavi}| Ülke kodu:{yesil} {ulke[5]}")
+        print (f"{mavi}| Global kontrol kodu:{yesil} {others_data[0]}")
+        print (f"{mavi}| Banka kodu:{yesil} {others_data[1]}")
+        print (f"{mavi}| Rezerv numrası:{yesil} {others_data[2]}")
+        print (f"{mavi}| Hesap numarası:{yesil} {others_data[3]}") 
+        print (f"{mavi}| Banka adı:{yesil} {others_data[4]}")
+        print (f"{mavi}| Şube kodu:{yesil} {others_data[5]} - bankanın il/ilçe/sokak bilgisini verir")
+        print (f"{mavi}| müşteri numarası (saf):{yesil} {others_data[6]}")
+        print (f"{mavi}| Hesap ek nosu:{yesil} {others_data[7]}")
+        print (f"{mavi}|-------------------------{temiz}")
     else:
-        print ("İban geçersizdir...!")
+        print (f"{Fore.RED}İban geçersizdir...!{temiz}")
 
 elif raw_iban_leng > standart_leng:
-    print ("İban olması gerekenden uzun...!")
-    print ("Bu iban geçersizdir...!")
+    print (f"{Fore.RED}İban olması gerekenden uzun...!")
+    print (f"Bu iban geçersizdir...!{temiz}")
 
 elif raw_iban_leng < standart_leng:  
-        print ("İban olması gerekenden kısa...!")
-        print ("Bu iban geçersizdir...!")
+        print (f"{Fore.RED}İban olması gerekenden kısa...!")
+        print (f"Bu iban geçersizdir...!{temiz}")
 else:
-        print ("Bilinmeyen hata...!")
+        print (f"{Fore.RED}Bilinmeyen hata...!{temiz}")
     
