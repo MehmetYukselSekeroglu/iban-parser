@@ -11,7 +11,7 @@ CEVRIM DISI OLARAK CALISABILMEKTEDIR
 LİSANS: MIT 
 YAZAR: TheKoba-dev 
 TELEGRAM: @BayTapsan 
-BELGE DUZENLENME:07.11.2022
+BELGE DUZENLENME:28.12.2022
 
 
 KULLANIM:
@@ -22,15 +22,6 @@ UYARI: IBAN'I YAZARKEN BOSLUK KULLANMYAINIZ
 import argparse
 from colorama import *
 import os
-import requests
-try:
-    from bs4 import BeautifulSoup
-except Exception:
-    try:
-        os.system("pip3 install bs4")
-    except Exception:
-        print("BeautifulSoup içe aktarılamadı")
-
 arguman = argparse.ArgumentParser()
 arguman.add_argument("-i","--iban",required=True,help="usage: -i \"TR330001000030570718255001\"")
 argumanlar = vars(arguman.parse_args())
@@ -774,22 +765,7 @@ else:
         os.system("clear")
     except Exception:
         pass
-scrap_url=url=f"https://iban.gen.tr/iban-cozumleme-ve-dogrulama?kod={iban}"
-try:
-    sorgulama=requests.get(url=scrap_url)
-    ayıklamanmıs_data=BeautifulSoup(sorgulama.content,"html.parser")
-    data_1=ayıklamanmıs_data.find(attrs={"class":"table table-bordered table-sm table-resolve-verify"})
-    data_1=data_1.find_all('td')
-    hata_durumu=False
-    try:
-        iban_il=data_1[2]
-        iban_ilce=data_1[1]
-    except Exception:
-        iban_il,iban_ilce=">> ALINAMADI <<"
-except Exception:
-    hata_durumu=True
-
-print(f"{mavi} >> By PRIME.{temiz}")
+print(f"{mavi} >> IBAN-PARSER.{temiz}")
 if raw_iban_leng == standart_leng:
     if iban_parametres(iban) != 0:
         print (f"{mavi}|-------------------------")
@@ -809,13 +785,6 @@ if raw_iban_leng == standart_leng:
         print (f"{mavi}| müşteri numarası (saf):{yesil} {others_data[6]}")
         print (f"{mavi}| Hesap ek nosu:{yesil} {others_data[7]}")
         print (f"{mavi}|-------------------------{temiz}")
-        if hata_durumu != True and sorgulama.status_code == 200:
-            print (f"{mavi}| WEB sonuçları: {temiz}")
-            print (f"{mavi}| Kayıtlı olduğu il: {yesil}{iban_il}")
-            print (f"{mavi}| Kayıtlı olduğu ilçe: {yesil}{iban_ilce}")
-            print (f"{mavi}|-------------------------{temiz}")
-        else:
-            print(f"{mavi}|Web'den sonuçlar alınamadı...!{temiz}")
     else:
         print (f"{Fore.RED}İban geçersizdir...!{temiz}")
 
