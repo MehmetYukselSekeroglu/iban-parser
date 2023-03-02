@@ -750,6 +750,8 @@ def iban_parametres(iban_1):
         bank_name = "DESTEKLENMİYOR"
     return control_number_global, bank_code_local, rezerve_code, account_number , bank_name ,sube_kodu , müşteri_nosu_raw, hesap_eki_kodu
 
+iban = str(iban)
+iban = iban.replace(" ","")
 ulke = country_detect(iban)
 
 others_data = iban_parametres(iban)
@@ -786,6 +788,15 @@ try:
         iban_ilce=data_1[1]
     except Exception:
         iban_il,iban_ilce=">> ALINAMADI <<"
+    iban_il = str(iban_il)
+    iban_ilce = str(iban_ilce)
+
+    iban_il = iban_il.strip('<td>')
+    iban_il= iban_il.strip('</td>')
+    
+    iban_ilce= iban_ilce.strip('<td>')
+    iban_ilce = iban_ilce.strip('</td>')
+
 except Exception:
     hata_durumu=True
 
@@ -815,7 +826,7 @@ if raw_iban_leng == standart_leng:
             print (f"{mavi}| Kayıtlı olduğu ilçe: {yesil}{iban_ilce}")
             print (f"{mavi}|-------------------------{temiz}")
         else:
-            print(f"{mavi}|Web'den sonuçlar alınamadı...!{temiz}")
+            print(f"{mavi}| Web'den sonuçlar alınamadı...!{temiz}")
     else:
         print (f"{Fore.RED}İban geçersizdir...!{temiz}")
 
