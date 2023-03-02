@@ -8,6 +8,7 @@
 </br>
 <h2>Yenilikler: </h2>
 <p>- Web kazıma ile otomatik il ilçe bilgisi verme eklendi</p>
+<p>- Boşluklar artık sorun değil!</p>
 
 <h2> Kullanım: </h2>
 <p>python3 offline_iban.py -i/--iban "TR950006200072300006290000"</p> 
