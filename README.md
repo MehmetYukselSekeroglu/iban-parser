@@ -10,4 +10,4 @@
 <p>- Web kazıma ile otomatik il ilçe bilgisi verme eklendi</p>
 
 <h2> Kullanım: </h2>
-<p>python3 offline_iban.py -i/--iban "TR950006200072300006290000"</p>
+<p>python3 offline_iban.py -i/--iban "TR950006200072300006290000"</p> 
