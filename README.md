@@ -13,5 +13,5 @@
 
 <h2> Kullanım: </h2>
 <p>python3 offline_iban.py --iban "TR950006200072300006290000"</p> 
-<p>python3 offline_iban.py --iban "TR 950 006 200 072300006290000</p>
+<p>python3 offline_iban.py --iban "TR 950 006 200 072300006290000"</p>
 <p>Bu şekilde boşluk ilede kullanılabilir.</p>
