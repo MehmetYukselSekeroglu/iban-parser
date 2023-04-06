@@ -14,7 +14,7 @@
 <p>- Web kazıma ile otomatik il ilçe bilgisi verme eklendi</p>
 <p>- Boşluklar artık sorun değil!</p>
 <p>- Daha kolay kullanıma sahip GUI hal hazırlandı </p>
-<h2>Kurulum:</h>
+<h2>Kurulum:</h2>
 
 ```sh
 git clone https://github.com/TheKoba-dev/iban-parser.git
